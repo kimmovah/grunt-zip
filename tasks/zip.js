@@ -123,10 +123,11 @@ module.exports = function(grunt) {
     srcFiles.forEach(function (filepath) {
       // Read in the contents
       var input = fs.readFileSync(filepath);
+      var zipPath = filepath;
 
       // Unzip it
       var zip = new Zip(input, {checkCRC32: data.checkCRC32});
-
+      
       // Pluck out the files
       var files = zip.files,
           filenames = Object.getOwnPropertyNames(files);
@@ -136,7 +137,7 @@ module.exports = function(grunt) {
         // Find the content
         var fileObj = files[filename],
             content = fileObj.asNodeBuffer(),
-            routedName = router(filename);
+            routedName = router(filename, zipPath);
 
         // If there is a file path (allows for skipping)
         if (routedName) {
